@@ -9,7 +9,8 @@ const config = {
     entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '/'
+        publicPath: '/',
+        filename: '[name].bundle.js',
     },
     devServer: {
         open: true,
@@ -27,6 +28,10 @@ const config = {
     module: {
         rules: [
             {
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                type: 'asset/resource',
+            },
+            {
                 test: /\.(ts|tsx)$/i,
                 loader: 'ts-loader',
                 exclude: ['/node_modules/'],
@@ -36,19 +41,13 @@ const config = {
                 use: [stylesHandler, 'css-loader'],
             },
 
-            {
-                test: /\.(jpg|png)$/,
-                use: {
-                    loader: 'url-loader',
-                },
-            },
 
             // Add your rules for custom modules here
             // Learn more about loaders from https://webpack.js.org/loaders/d
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.jsx', '.js', '.mjs', '.json', '...'],
+        extensions: ['.tsx', '.ts', '.jsx', '.js', '.mjs', '.json','.svg', '...'],
     },
 };
 
