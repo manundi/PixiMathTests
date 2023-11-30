@@ -5,8 +5,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 //const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const stylesHandler = 'style-loader';
 
+const pages = ["index", "trigonometry"];
+
 const config = {
-    entry: './src/index.ts',
+    entry: pages.reduce((config, page) => {
+        config[page] = `./src/${page}.ts`;
+        return config;
+      }, {}),
     output: {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/',
@@ -19,12 +24,17 @@ const config = {
             directory: path.join(__dirname, 'dist'),
         },
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: 'index.html',
-        }),
-
-    ],
+    plugins: [].concat(
+        pages.map(
+          (page) =>
+            new HtmlWebpackPlugin({
+              inject: true,
+              template: `./${page}.html`,
+              filename: `${page}.html`,
+              chunks: [page],
+            })
+        )
+      ),
     module: {
         rules: [
             {
